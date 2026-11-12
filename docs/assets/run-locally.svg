@@ -1,0 +1,5 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="170" height="46" viewBox="0 0 170 46" role="img" aria-label="Run locally">
+<rect x=".5" y=".5" width="169" height="45" rx="8" fill="#f0f3e9" stroke="#ccd7be"/>
+<g stroke="#49663b" stroke-width="1.8" fill="none"><path d="m18 17 6 6-6 6M29 29h9"/></g>
+<text x="53" y="27" font-family="Segoe UI,Arial,sans-serif" font-size="12" font-weight="600" fill="#3a5732">RUN LOCALLY</text>
+</svg>

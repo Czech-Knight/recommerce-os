@@ -1,0 +1,17 @@
+﻿node_modules/
+.next/
+.data/
+.npm-cache/
+.env*
+!.env.example
+.aws/
+.codex/
+.agents/
+*.pem
+*.key
+test-results/
+playwright-report/
+*.tsbuildinfo
+*.log
+.DS_Store
+Thumbs.db

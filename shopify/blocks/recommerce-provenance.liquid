@@ -1,0 +1,28 @@
+﻿{% comment %}
+  Optional Online Store 2.0 theme section. Copy into the theme's sections folder.
+  Set seller and condition product metafields in Shopify if you want these labels.
+  This is a theme section, not a checkout extension or Shopify Function.
+{% endcomment %}
+{% if product %}
+  <aside class="recommerce-provenance" style="padding:1rem;border:1px solid #dfe7d6;border-radius:8px;margin:1rem 0;background:#f4f7ee">
+    <strong>{{ section.settings.heading | escape }}</strong>
+    {% if product.metafields.recommerce.condition != blank %}
+      <p>Condition: {{ product.metafields.recommerce.condition.value | escape }}</p>
+    {% endif %}
+    {% if product.metafields.recommerce.seller != blank %}
+      <p>Sold by {{ product.metafields.recommerce.seller.value | escape }}</p>
+    {% endif %}
+    <p>{{ section.settings.description | escape }}</p>
+  </aside>
+{% endif %}
+{% schema %}
+{
+  "name": "ReCommerce provenance",
+  "settings": [
+    {"type":"text","id":"heading","label":"Heading","default":"A good find. A new chapter."},
+    {"type":"text","id":"description","label":"Description","default":"Selected by an independent seller for its next home."}
+  ],
+  "presets": [{"name":"ReCommerce provenance"}],
+  "enabled_on": {"templates":["product"]}
+}
+{% endschema %}

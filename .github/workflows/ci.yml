@@ -1,0 +1,41 @@
+﻿name: ReCommerce checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: recommerce
+          POSTGRES_PASSWORD: recommerce
+          POSTGRES_DB: recommerce_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U recommerce"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm test
+        name: PostgreSQL transaction and concurrency tests
+        env:
+          TEST_DATABASE_URL: postgresql://recommerce:recommerce@localhost:5432/recommerce_test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+        env:
+          DEMO_MODE: "true"
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-failures
+          path: test-results/

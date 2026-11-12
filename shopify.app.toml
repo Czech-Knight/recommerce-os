@@ -1,0 +1,18 @@
+﻿# Replace the client ID and URLs before using `shopify app deploy`.
+client_id = "REPLACE_WITH_YOUR_CLIENT_ID"
+name = "ReCommerce OS"
+application_url = "https://YOUR_HTTPS_APP_URL"
+embedded = false
+
+[access_scopes]
+scopes = "read_products,write_products,read_inventory,write_inventory,read_orders,read_locations"
+
+[auth]
+redirect_urls = ["https://YOUR_HTTPS_APP_URL/api/shopify/callback"]
+
+[webhooks]
+api_version = "2026-10"
+
+[[webhooks.subscriptions]]
+topics = ["orders/create", "orders/paid", "app/uninstalled"]
+uri = "/api/shopify/webhooks"

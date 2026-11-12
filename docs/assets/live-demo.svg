@@ -1,0 +1,7 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="248" height="46" viewBox="0 0 248 46" role="img" aria-label="Live demo — coming soon">
+<rect x=".5" y=".5" width="247" height="45" rx="8" fill="#1d3d2d" stroke="#7fa36c"/>
+<path d="m18 15 12 8-12 8Z" fill="#b9ef9b"/>
+<text x="43" y="27" font-family="Segoe UI,Arial,sans-serif" font-size="12" font-weight="600" fill="#f1f6ea">LIVE DEMO</text>
+<rect x="126" y="12" width="108" height="22" rx="5" fill="#354c36"/>
+<text x="180" y="27" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="9" font-weight="600" letter-spacing=".7" fill="#c9d8ad">COMING SOON</text>
+</svg>
