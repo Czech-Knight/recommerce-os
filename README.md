@@ -14,9 +14,9 @@ and an order engine built to handle retries, duplicate webhooks and recovery.
   <img src="https://img.shields.io/badge/UI-refresh_planned-d5c69d?style=flat-square&amp;labelColor=18382b" alt="UI refresh planned" />
 </p>
 
-<!-- LIVE_DEMO_URL: replace this anchor with the verified website URL after the UI refresh and deployment. -->
+<!-- LIVE_DEMO_URL: verified public Render sandbox. -->
 
-<a href="#live-demo"><img src="docs/assets/live-demo.svg" alt="Live demo — coming soon" height="46" /></a>
+<a href="https://recommerce-os-demo.onrender.com"><img src="docs/assets/live-demo.svg" alt="Live demo — open website" height="46" /></a>
 <a href="#run-locally"><img src="docs/assets/run-locally.svg" alt="Run locally" height="46" /></a>
 <a href="#architecture"><img src="docs/assets/architecture.svg" alt="Explore architecture" height="46" /></a>
 
@@ -31,9 +31,11 @@ and an order engine built to handle retries, duplicate webhooks and recovery.
 
 ## Live demo
 
-**Deployment setup ready; hosting connection pending.** The button above will open the verified website URL after deployment. For now it opens this status section; no public website is deployed.
+**[Open the live ReCommerce demo →](https://recommerce-os-demo.onrender.com)**
 
-The application runs locally with sample products and demo roles. The Render configuration runs the same application as a public sandbox; real Shopify validation uses a separate environment with PostgreSQL and Redis.
+Shared sandbox with sample data. **No real payments.** First load may take a moment while the free host wakes up; demo changes can reset when it restarts. Use fictional checkout details.
+
+Try **Integrations → Simulate Shopify order → Replay duplicate webhook**, then switch to Seller to see the order and notification. The public demo simulates Shopify events; real development-store validation is tracked separately.
 
 [Launch the local demo →](#run-locally) · [Website release checklist →](docs/DEMO-RELEASE.md)
 
@@ -200,7 +202,7 @@ docker compose exec web npm run db:admin
 
 ## Verification
 
-**20 core/adapter tests. 5 browser flows.** The CI badge at the top reports the current GitHub Actions result.
+**23 core/adapter/hosting tests. 5 browser flows.** The CI badge at the top reports the current GitHub Actions result. A separate Docker smoke test verifies health, HTTPS origins, session cookies and duplicate-order replay within a 512 MiB memory limit.
 
 | Coverage                | Examples                                                                                                                     |
 | :---------------------- | :--------------------------------------------------------------------------------------------------------------------------- |
@@ -227,7 +229,7 @@ CI is configured to run the engine suite against both PGlite and a PostgreSQL se
 - [x] Shopify authentication, signed webhooks and catalogue adapters
 - [x] Durable job recovery, tests, Docker and CI configuration
 - [ ] **Redesign and polish the storefront/dashboard UI**
-- [ ] **Deploy the website and activate the Live Demo button**
+- [x] **Deploy the website and activate the Live Demo button**
 - [ ] Validate real Shopify test orders and the PostgreSQL/Redis worker end to end
 - [ ] Payment-provider integration, seller payouts and refund automation
 - [ ] External inventory/order reconciliation and multi-location support

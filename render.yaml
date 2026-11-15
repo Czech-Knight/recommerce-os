@@ -18,3 +18,5 @@ services:
         value: /app/.data/demo
       - key: NEXT_TELEMETRY_DISABLED
         value: "1"
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=128 --max-semi-space-size=4
