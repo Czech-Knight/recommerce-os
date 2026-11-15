@@ -58,8 +58,9 @@ jobs:
           recommerce-demo
       - name: Wait for database readiness
         run: >-
-          curl --fail --silent --show-error --retry 24 --retry-connrefused
-          --retry-delay 5 http://127.0.0.1:3100/api/health
+          curl --fail --silent --show-error --retry 24 --retry-all-errors
+          --retry-delay 5 --retry-max-time 120 --max-time 10
+          http://127.0.0.1:3100/api/health
       - name: Verify hosted origin, secure cookies and role switching
         run: |
           node --input-type=module <<'NODE'
