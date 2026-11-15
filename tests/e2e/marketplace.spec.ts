@@ -85,14 +85,16 @@ test("seller listing is private until an admin approves it", async ({
 });
 test("server rejects cross-role access and foreign origins", async ({
   request,
+  baseURL,
 }) => {
+  const origin = new URL(baseURL || "http://127.0.0.1:3000").origin;
   const login = await request.post("/api/auth/demo", {
-    headers: { origin: "http://127.0.0.1:3000" },
+    headers: { origin },
     data: { role: "customer" },
   });
   expect(login.status()).toBe(200);
   const response = await request.post("/api/users/update", {
-    headers: { origin: "http://127.0.0.1:3000" },
+    headers: { origin },
     data: { id: "demo-seller", status: "suspended" },
   });
   expect(response.status()).toBe(403);
