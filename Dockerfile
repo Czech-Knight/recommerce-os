@@ -5,6 +5,7 @@ RUN npm ci
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
+RUN node scripts/prepare-demo.mjs /app/.data/demo
 
 FROM node:22-bookworm-slim AS runtime
 WORKDIR /app
@@ -16,6 +17,7 @@ COPY --from=build --chown=node:node /app/public ./public
 COPY --from=build --chown=node:node /app/src ./src
 COPY --from=build --chown=node:node /app/scripts ./scripts
 COPY --from=build --chown=node:node /app/tsconfig.json /app/next.config.ts ./
+COPY --from=build --chown=node:node /app/.data/demo ./.data/demo
 RUN mkdir -p /app/.data/uploads && chown -R node:node /app/.data
 USER node
 EXPOSE 3000
