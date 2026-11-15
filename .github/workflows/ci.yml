@@ -39,3 +39,62 @@ jobs:
         with:
           name: playwright-failures
           path: test-results/
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build deployment image
+        run: docker build -t recommerce-demo .
+      - name: Start hosted demo with a proxy origin and assigned port
+        run: >-
+          docker run -d --name recommerce-demo
+          -p 127.0.0.1:3100:10000
+          -e PORT=10000 -e DEMO_MODE=true
+          -e RENDER_EXTERNAL_URL=https://demo.example
+          recommerce-demo
+      - name: Wait for database readiness
+        run: >-
+          curl --fail --silent --show-error --retry 24 --retry-connrefused
+          --retry-delay 5 http://127.0.0.1:3100/api/health
+      - name: Verify hosted origin, secure cookies and role switching
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          const base = 'http://127.0.0.1:3100';
+          const health = await fetch(`${base}/api/health`);
+          assert.equal(health.status, 200);
+          assert.deepEqual(await health.json(), { status: 'ok', mode: 'demo' });
+          const page = await fetch(base);
+          assert.equal(page.status, 200);
+          assert.match(await page.text(), /ReCommerce OS/);
+          const login = await fetch(`${base}/api/auth/demo`, {
+            method: 'POST',
+            headers: { origin: 'https://demo.example', 'content-type': 'application/json' },
+            body: JSON.stringify({ role: 'customer' }),
+          });
+          assert.equal(login.status, 200);
+          const cookie = login.headers.getSetCookie().find(value => value.startsWith('rc_session='));
+          assert.ok(cookie);
+          assert.match(cookie, /; Secure/i);
+          const state = await fetch(`${base}/api/state`, { headers: { cookie: cookie.split(';')[0] } });
+          assert.equal((await state.json()).user.role, 'customer');
+          for (const origin of ['https://attacker.example', 'http://localhost:3000']) {
+            const rejected = await fetch(`${base}/api/auth/demo`, {
+              method: 'POST',
+              headers: { origin, 'content-type': 'application/json' },
+              body: JSON.stringify({ role: 'admin' }),
+            });
+            assert.equal(rejected.status, 403);
+          }
+          console.log('Container health, page, hosted origin, Secure cookie and role checks passed.');
+          NODE
+      - name: Container logs
+        if: failure()
+        run: docker logs recommerce-demo
+      - name: Stop test container
+        if: always()
+        run: docker rm -f recommerce-demo || true

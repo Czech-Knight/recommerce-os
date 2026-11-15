@@ -1,0 +1,20 @@
+# Public portfolio sandbox. Real Shopify verification uses a separate live stack.
+services:
+  - type: web
+    name: recommerce-os-demo
+    runtime: docker
+    repo: https://github.com/Czech-Knight/recommerce-os
+    branch: main
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: DEMO_MODE
+        value: "true"
+      - key: DEMO_DATA_DIR
+        value: /app/.data/demo
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"

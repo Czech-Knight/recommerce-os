@@ -31,11 +31,13 @@ and an order engine built to handle retries, duplicate webhooks and recovery.
 
 ## Live demo
 
-**Coming after the UI refresh.** The button above is ready for the hosted website URL. For now it opens this status section; no public website is deployed.
+**Deployment setup ready; hosting connection pending.** The button above will open the verified website URL after deployment. For now it opens this status section; no public website is deployed.
 
-The application already runs locally with sample products and demo roles. The next phase is the storefront/dashboard redesign, followed by deployment and live-store verification.
+The application runs locally with sample products and demo roles. The Render configuration runs the same application as a public sandbox; real Shopify validation uses a separate environment with PostgreSQL and Redis.
 
 [Launch the local demo →](#run-locally) · [Website release checklist →](docs/DEMO-RELEASE.md)
+
+[Real Shopify proof checklist →](docs/INTEGRATION-PROOF.md) · [Production roadmap →](docs/PRODUCTION-ROADMAP.md)
 
 ## The idea
 

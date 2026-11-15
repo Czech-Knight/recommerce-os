@@ -7,7 +7,7 @@
 import { cookies } from "next/headers";
 import type { Database } from "./db";
 import type { User } from "./types";
-import { isDemo } from "./config";
+import { configuredAppUrl, isDemo } from "./config";
 export const digest = (s: string) =>
   createHash("sha256").update(s).digest("hex");
 export function hashPassword(password: string) {
@@ -50,7 +50,7 @@ export async function newSession(db: Database, userId: string) {
   (await cookies()).set("rc_session", token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.APP_URL?.startsWith("https://") || false,
+    secure: configuredAppUrl()?.startsWith("https://") || false,
     path: "/",
     maxAge: 604800,
   });
@@ -74,10 +74,11 @@ export function requireRole(user: User | null, ...roles: string[]): User {
 }
 export function sameOrigin(request: Request) {
   const origin = request.headers.get("origin");
-  const allowed = process.env.APP_URL || new URL(request.url).origin;
+  const configured = configuredAppUrl();
+  const allowed = configured || new URL(request.url).origin;
   const localDemo =
     isDemo() &&
-    !process.env.APP_URL &&
+    !configured &&
     ["http://127.0.0.1:3000", "http://localhost:3000"].includes(origin || "");
   if (
     !origin ||
